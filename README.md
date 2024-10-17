@@ -13,94 +13,102 @@ This guide explains how to set up a light client using Docker, Go, and IPFS on U
 1. Install Docker using a single command:
    ```bash
    curl -fsSL https://get.docker.com | sudo bash
-   
+   ```
 
-2. Verify Docker installation:
-   
+2. Add your user to the Docker group to run Docker without `sudo`:
+   ```bash
+   sudo usermod -aG docker $USER
+   ```
+
+3. Log out and log back in for group changes to take effect, or run:
+   ```bash
+   newgrp docker
+   ```
+
+4. Verify Docker installation:
+   ```bash
    docker --version
-   
+   ```
 
 ## 3. Install Go
 
 1. Download and install Go:
-   
+   ```bash
    wget https://go.dev/dl/go1.22.3.linux-amd64.tar.gz
    sudo tar -C /usr/local -xzf go1.22.3.linux-amd64.tar.gz
-   
+   ```
 
 2. Set up environment variables for Go:
-   
+   ```bash
    echo "" >> ~/.bashrc
    echo 'export GOPATH=$HOME/go' >> ~/.bashrc
    echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
    echo 'export GOBIN=$GOPATH/bin' >> ~/.bashrc
    echo 'export PATH=$PATH:/usr/local/go/bin:$GOBIN' >> ~/.bashrc
    source ~/.bashrc
-   
+   ```
 
 3. Verify Go installation:
-   
+   ```bash
    go version
-   
+   ```
 
 ## 4. Install IPFS
 
 1. Download and install IPFS (Kubo):
-   
+   ```bash
    wget https://dist.ipfs.tech/kubo/v0.30.0/kubo_v0.30.0_linux-amd64.tar.gz
    tar -xvzf kubo_v0.30.0_linux-amd64.tar.gz
-   
+   ```
 
 2. Verify IPFS installation:
-   
+   ```bash
    ipfs --version
-   
+   ```
 
 ## 5. Clone the Repository
 
 1. Navigate to your home directory:
-   
+   ```bash
    cd ~
-   
+   ```
 
-2. Clone the ewm-das repository:
-   
+2. Clone the `ewm-das` repository:
+   ```bash
    git clone https://github.com/covalenthq/ewm-das
    cd ewm-das
-   
+   ```
 
 ## 6. Build the Docker Image
 
 1. Build the Docker image:
-   
+   ```bash
    docker build -t covalent/light-client -f Dockerfile.lc .
-   
+   ```
 
 ## 7. Run the Docker Container
 
 1. Run the Docker container using the private key from your burner wallet:
-
-
-   
+   ```bash
    docker run -d --restart always --name light-client -e PRIVATE_KEY="YOUR_HEX_PRIVATE_KEY" covalent/light-client
-   
+   ```
 
-   Replace YOUR_HEX_PRIVATE_KEY with the private key you generated at [VisualKey](https://visualkey.link/). Delete the fist 0x on the private key.
+   Replace `YOUR_HEX_PRIVATE_KEY` with the private key you generated at [VisualKey](https://visualkey.link/).
 
 ## 8. Check the Container Status
 
 1. View the container logs:
-   
+   ```bash
    docker logs -f light-client
-   
+   ```
 
    Example output:
-   
+   ```
    Version: v0.10.0, commit: 8d6709bee9e79d3c4e6ece35fed65da02f3850f4
    2024-09-18T15:45:01.238-0700    INFO    light-client    light-client/main.go:91    Starting client...
    2024-09-18T15:45:01.238-0700    INFO    light-client    light-client/main.go:97    Client identity: 0x51b6D674514849aF97FB77BCac51bcdD7799842C
    ...
-   
+   ```
 
 ## Additional Resources
 
